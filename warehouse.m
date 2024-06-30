@@ -7,8 +7,10 @@
 
 % This script is developed with MATLAB R2018b version. May not properly work with other versions.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 %% Initialization
 clear;close all
+
 showFig = 2;
 nRobot = 3;
 numTaskPerStep = 10;
@@ -31,15 +33,18 @@ timeInBundle = 0;
 timeInExecution = 0;
 numCollison = 0;
 gridMap = zeros(xSize,ySize);
+
 robotX = randi(xSize, [nRobot, 1]);
 robotY = randperm(ySize, nRobot)'; 
 robotXY = [robotX, robotY];
 robotSet = [(1:nRobot)' robotXY zeros([nRobot 1])];
+
 for i=1:nRobot
     robotBundles{i} = [];
     robotBundlesRecord{i} = [];
     robotPaths{i} = [];
 end
+
 stationXY = [ceil(xSize/2), 1];
 rackXY = taskID2XY(1:itemEndID, itemEndID, xSize, ySize);
 taskQueue = [];
@@ -243,7 +248,7 @@ while tStep < tMax
                 goalXY  = thisRobotBundle(1,3:4);
             end
             gridMap(goalXY(1), goalXY(2)) = 0;%goal location should be free
-            thisRobotPath = flipud(A_Star_Search(startXY, goalXY, ~gridMap));
+            thisRobotPath = flipud(astar(startXY, goalXY, ~gridMap));
             modWhen = 1;
             robotSet(thisRobotIdx,2:3) = thisRobotPath(1,:);
             if showFig == 2
@@ -278,7 +283,7 @@ while tStep < tMax
                     %plan path to the station
                     startXY = thisRobotXY;
                     goalXY  = stationXY;
-                    thisRobotPath = flipud(A_Star_Search(startXY, goalXY, ~gridMap));
+                    thisRobotPath = flipud(astar(startXY, goalXY, ~gridMap));
                     modWhen = 2;
                     robotPaths{thisRobotIdx} = thisRobotPath; %register path (begins with the crt pose but in the same step the robot shouldn't move->stay one step for path computation)
                     if showFig == 2
@@ -314,6 +319,7 @@ while tStep < tMax
     %% Increment counter
     tStep = tStep + 1;
 end
+
 numCompletedTasks = sum((taskAll(:,3) >= 0));
 tp = taskAll((taskAll(:,3) >= 0),:);
 tp2 = taskAll((taskAll(:,3) < 0),:);
