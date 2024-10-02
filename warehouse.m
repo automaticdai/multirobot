@@ -12,12 +12,12 @@
 clear;close all
 
 showFig = 2;
-nRobot = 3;
+nRobot = 10;
 numTaskPerStep = 10;
 probArrival = 1;
 alpha = 2;
-xSize = 20;
-ySize = 20;
+xSize = 25;
+ySize = 25;
 itemEndID = 200; %xSize*ySize > itemEndID + ySize*2
 tMax = 1000;
 tStep = 0;
@@ -201,7 +201,7 @@ while tStep < tMax
             if (isequal(myNextCell, yourNextCell) || isequal(myNextCell, yourCrtCell) || isequal(myCrtCell, yourNextCell)) && (j ~= thisRobotIdx)
                 conflict = true;
                 if (j > thisRobotIdx)
-                    makeDetour = true;% If its ID is larger than me, I should not move
+                    makeDetour = true; % If its ID is larger than me, I should not move
                 end
             end
         end
@@ -228,14 +228,14 @@ while tStep < tMax
                         end
                         yourCrtCell = yourNextPath(1,:);
                     elseif isempty(yourNextPath)
-                        yourNextCell = [robotSet(k,2),robotSet(k,3)];
-                        yourCrtCell = [robotSet(k,2),robotSet(k,3)];
+                        yourNextCell = [robotSet(k,2), robotSet(k,3)];
+                        yourCrtCell = [robotSet(k,2), robotSet(k,3)];
                     else
                         yourNextCell = yourNextPath(1,:);
                         yourCrtCell = yourNextPath(1,:);
                     end          
-                    gridMap(yourNextCell(1),yourNextCell(2)) = 1;
-                    gridMap(yourCrtCell(1),yourCrtCell(2)) = 1;
+                    gridMap(yourNextCell(1), yourNextCell(2)) = 1;
+                    gridMap(yourCrtCell(1), yourCrtCell(2)) = 1;
                 end
             end
             gridMap(thisRobotXY(1), thisRobotXY(2)) = 0;
